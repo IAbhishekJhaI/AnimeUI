@@ -1,6 +1,6 @@
 # Sakuga VFX
 
-Ordinary UI controls that react like anime. At rest they are plain. Use one and it squashes and overshoots on springs, and throws drawn effects around itself: smoke puffs, impact bursts, crystal chips, slashes, splashes, smoke rings and lightning, with manga sound-effect lettering (ドン!, カチッ, ズザッ). No characters, just the way a key animator would sell a hit.
+Ordinary UI controls that react like anime. At rest they are plain. Use one and it squashes and overshoots on springs, and throws drawn effects around itself: smoke puffs, impact bursts, crystal chips, slashes, splashes and smoke rings, with manga sound-effect lettering (ドン!, カチッ, ズザッ). No characters, just the way a key animator would sell a hit.
 
 Every effect is drawn in code on one canvas over the page. The lettering was painted with GPT Image and traced to paths, and the toggle is 43 painted frames; both live inside the component files, so there is nothing else to fetch. No dependencies, no build step for you, MIT licensed.
 
@@ -20,15 +20,9 @@ Every effect is drawn in code on one canvas over the page. The lettering was pai
 | [Toast](toast/) | `<sakuga-toast>` | Streaks in as a smear, lands in dust with ズザッ, leaves by shrinking. |
 | [Tooltip](tooltip/) | `<sakuga-tooltip>` | The hint springs out like a speech bubble with puffs and カチッ. |
 
-## Three looks
+## The look
 
-The same components and the same effect code, with a different palette and a different hit:
-
-- **Sakuga** (the default): white paper, two-tone effects (white, lavender, a violet line), pink accents, an impact burst.
-- **Slash:** black, glowing red slashes, cyan lightning, lettering edged in cyan.
-- **Manga:** ink and screentone, shockwave rings and speed lines, BANG.
-
-Pick one for the whole page with `<html data-sakuga-theme="slash">`, or `SakugaFX.setTheme('manga')`. Every colour is a `--sk-*` CSS variable (`--sk-ink`, `--sk-card`, `--sk-pri`, `--sk-acc` and so on), and a page's own `:root { --sk-acc: ... }` wins over the theme.
+White paper, two-tone effects (white, lavender and a violet line), pink accents, and an impact burst on every confirm. The controls' colours are `--sk-*` CSS variables (`--sk-ink`, `--sk-card`, `--sk-pri`, `--sk-acc` and so on), and a page's own `:root { --sk-acc: ... }` wins over the defaults.
 
 ## Try them
 
@@ -41,7 +35,7 @@ python3 -m http.server 8000     # from this folder
 # open http://localhost:8000/
 ```
 
-That opens the gallery, with all twelve live and a switch for the three looks.
+That opens the gallery, with all twelve live.
 
 ## Use one
 
@@ -69,7 +63,7 @@ Or copy the file into your project by hand. Then load it with a plain script tag
 
 Each folder's README lists the attributes, properties and events. The value controls (toggle, slider, checkbox, radio, input, rating) work inside a `<form>` like the native ones.
 
-**How the files share.** Each file carries its own copy of the core (springs, the effects layer, the lettering, about 58 KB). The first one loaded sets `window.SakugaFX` and the others reuse it, so any mix of them on a page shares one canvas and one animation loop. The toggle is about 520 KB because its frames are inside it.
+**How the files share.** Each file carries its own copy of the core (springs, the effects layer, the lettering, about 40 KB). The first one loaded sets `window.SakugaFX` and the others reuse it, so any mix of them on a page shares one canvas and one animation loop. The toggle is about 500 KB because its frames are inside it.
 
 For agents, [llms.txt](llms.txt) lists every file and what it is. In the gallery each control has its install line and a "Copy a prompt for your agent" button; the prompt points a coding agent at the real file and tells it to wire it in, not redraw it.
 
@@ -93,16 +87,15 @@ An agent with the skill gets a reasonable first pass. These took many rounds of 
 ## Working on this repo
 
 - `core.js` is the source of the shared core. After editing it, run `node tools/build.mjs`, which copies it into every component file (between the `// >>> sakuga core` markers) and into the skill. `node tools/build.mjs --check` exits 1 if any file is out of date.
-- `art/words/` holds the eight painted sound-effect words. `tools/trace.py` traces them into paths and writes them into `core.js` (`uv run --with potracer --with pillow --with numpy python tools/trace.py`).
+- `art/words/` holds the six painted sound-effect words. `tools/trace.py` traces them into paths and writes them into `core.js` (`uv run --with potracer --with pillow --with numpy python tools/trace.py`).
 - `toggle/frames.webp` is the toggle's sprite sheet (43 frames, 8 across, 300 by 325 each). The build writes it into `toggle.js`.
-- `node tools/test.mjs http://localhost:8000/gallery/` drives every control with real touch and key events at phone width, checks form values, the themes and sideways scroll, and exits 1 on a failure. `node tools/shot.mjs URL OUT W H SCALE` takes a full-page screenshot. Both need Chrome or Chromium (`CHROME=...` if it is somewhere unusual).
+- `node tools/test.mjs http://localhost:8000/gallery/` drives every control with real touch and key events at phone width, checks form values and sideways scroll, and exits 1 on a failure. `node tools/shot.mjs URL OUT W H SCALE` takes a full-page screenshot. Both need Chrome or Chromium (`CHROME=...` if it is somewhere unusual).
 
 ## Limits
 
 - **Checked in headless Chromium,** with real touch and key events and frame-by-frame sheets. Not yet tried in Safari or Firefox, on a real phone, or with a screen reader.
 - **The effects canvas sits on top of everything,** at the highest z-index, and ignores the pointer. Effects can fly over a modal or a sticky header.
 - **Effects behind a control are drawn inside it** (the button's and the progress bar's bursts, the five-star burst) and are cut off by a parent with `overflow: hidden`.
-- **One look per page.** The theme is set on `<html>`, not per component.
 - **Reduced motion** turns every effect off; the springs and the state changes stay.
 
 ## License

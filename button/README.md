@@ -13,7 +13,7 @@ python3 -m http.server 8000     # from the repo folder
 # open http://localhost:8000/button/
 ```
 
-`?theme=slash` or `?theme=manga` shows the other looks. `?embed=1` hides the heading.
+`?embed=1` hides the heading.
 
 ## Use it
 
@@ -54,8 +54,6 @@ el.disabled = true;
 | let go | an impact frame: ink background for 0.19 s, a 5° tilt, a pop to 124%. A 98-pixel burst goes off behind it, eleven crystals fly, four clouds roll off the corners, ドン! lands above |
 | 0.2 s later | it springs tall, wobble marks either side, three smoke rings of falling size drift up and right, chips drop off the bottom |
 | `done()` | a pink check grows on the end of the label, with a glint and two wedges at the corner |
-
-In the Slash look the impact is two red crescents, lightning and ズバッ!!; in Manga it is a row of shockwave rings, speed lines and BANG!!.
 
 ## Limits
 

@@ -6,8 +6,6 @@
 <title>Sakuga VFX</title>
 <style>
   :root { --page: #ffffff; --text: #1d1a4a; --mute: #8580b0; --line: #dcdaf0; --chip: #f4f3fc; }
-  :root[data-sakuga-theme=slash] { --page: #000000; --text: #ffffff; --mute: #8a8a94; --line: #26262c; --chip: #111115; }
-  :root[data-sakuga-theme=manga] { --page: #f4f1e8; --text: #111111; --mute: #6b675e; --line: #d9d5c9; --chip: #ebe7dc; }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; overflow-x: clip; background: var(--page); }
   body { margin: 0; color: var(--text); background: var(--page); font: 500 15px/1.45 -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; transition: background .2s, color .2s; }
@@ -20,9 +18,6 @@
   .links { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
   .pill { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 13px; border: 1.5px solid var(--line); border-radius: 999px; background: none; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; }
   .pill:hover { border-color: var(--text); }
-  .themes { display: flex; gap: 6px; }
-  .themes button { padding: 6px 13px; border: 2px solid var(--text); border-radius: 99px; background: var(--page); font-size: 13px; font-weight: 700; cursor: pointer; }
-  .themes button[aria-checked=true] { background: var(--text); color: var(--page); }
   :focus-visible { outline: 2.5px solid #ff5fa8; outline-offset: 3px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 28px; grid-auto-flow: dense; }
   .card { display: flex; flex-direction: column; min-width: 0; border: 1.5px solid var(--line); border-radius: 18px; }
@@ -46,20 +41,15 @@
   <header>
     <div>
       <h1>Sakuga VFX</h1>
-      <p class="lede">Twelve ordinary controls that react like anime: squash and overshoot on springs, and drawn effects (smoke, impact bursts, splashes, slashes, lightning) with manga sound-effect lettering. Each one is a single file with no dependencies.</p>
+      <p class="lede">Twelve ordinary controls that react like anime: squash and overshoot on springs, and drawn effects (smoke, impact bursts, splashes, slashes) with manga sound-effect lettering. Each one is a single file with no dependencies.</p>
       <p class="links">
         <a class="pill" href="https://github.com/finktheartist/sakuga-vfx" target="_blank" rel="noopener">The repo on GitHub <span aria-hidden="true">&#8599;</span></a>
         <a class="pill" href="https://x.com/crtvTeknologist" target="_blank" rel="noopener">@crtvTeknologist on X <span aria-hidden="true">&#8599;</span></a>
       </p>
     </div>
-    <div class="themes" role="radiogroup" aria-label="Look">
-      <button type="button" role="radio" aria-checked="true" data-t="sakuga">Sakuga</button>
-      <button type="button" role="radio" aria-checked="false" data-t="slash">Slash</button>
-      <button type="button" role="radio" aria-checked="false" data-t="manga">Manga</button>
-    </div>
   </header>
   <main class="grid" id="grid"></main>
-  <p class="note">Effects are drawn on one canvas over the page and switch off for <code>prefers-reduced-motion</code>. The look is set on the page with <code>&lt;html data-sakuga-theme="slash"&gt;</code>, and every colour is a <code>--sk-*</code> variable you can override.</p>
+  <p class="note">Effects are drawn on one canvas over the page and switch off for <code>prefers-reduced-motion</code>. Every colour is a <code>--sk-*</code> variable you can override.</p>
 </div>
 <script src="../button/button.js"></script>
 <script src="../toggle/toggle.js"></script>
@@ -128,7 +118,7 @@ const prompt = (it) => [
   `1. Get the file from ${fileUrl(it.id)} and save it in my project as ${it.id}.js. Do not rewrite it or split it up.`,
   `2. Load it with a plain script tag (not type="module").`,
   ...WIRE[it.id].map((l, i) => `${i + 3}. ${l}`),
-  `${WIRE[it.id].length + 3}. Its effects are drawn on one fixed canvas over the page, so they can fly outside the control. They switch off for prefers-reduced-motion. Its colours are --sk-* CSS variables; for the black or the screentone look, set data-sakuga-theme="slash" or "manga" on <html>.`,
+  `${WIRE[it.id].length + 3}. Its effects are drawn on one fixed canvas over the page, so they can fly outside the control. They switch off for prefers-reduced-motion. Its colours are --sk-* CSS variables.`,
   `When you are done, show me where you put it and what listens to it. If something about it needs to look different, tell me instead of editing the effects.`,
   ``,
   `These components were made with my sakuga-vfx skill: ${SKILL.url}`,
@@ -162,10 +152,6 @@ async function copy(text, btn, said) {
   }
   said.textContent = ok ? (btn.dataset.copy === 'cmd' ? 'Install command copied' : 'Prompt copied') : 'Could not copy here';
 }
-const tb = [...document.querySelectorAll('.themes button')];
-const pick = (t) => { tb.forEach((b) => b.setAttribute('aria-checked', String(b.dataset.t === t))); SakugaFX.setTheme(t); };
-tb.forEach((b) => b.addEventListener('click', () => { pick(b.dataset.t); const r = b.getBoundingClientRect(); SakugaFX.hit(r.left + scrollX + r.width / 2, r.top + scrollY + r.height / 2, { r: 30, w: r.width / 2 }); }));
-const q = new URLSearchParams(location.search).get('theme'); if (q) pick(q);
 </script>
 </body>
 </html>

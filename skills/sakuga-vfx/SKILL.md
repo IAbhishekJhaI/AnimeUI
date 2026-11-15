@@ -9,7 +9,7 @@ A Sakuga control is an ordinary control (a button, a switch, a slider) that is p
 
 This skill is the workflow the set was made by. It comes with three files:
 
-- `core.js` — the shared core: `Spring`, the effects layer and every effect, the lettering, the themes, and `Base`, a custom-element base class with one shared clock.
+- `core.js` — the shared core: `Spring`, the effects layer and every effect, the lettering, the palette, and `Base`, a custom-element base class with one shared clock.
 - `starter.html` — the smallest whole example, a like button. Copy it to start a new one.
 - `look.mjs` — stops the clock, steps a reaction to chosen moments and saves the frames side by side, so you can read them.
 
@@ -19,7 +19,7 @@ If the job is only to put an existing component into an app, skip to **Wire it i
 
 1. **The control.** It must still be that control with every effect switched off: a real `<button>`, `<input>` or `role="switch"` inside, with keys and focus.
 2. **The beats.** Write the reaction as beats, the way a key animator would: anticipation (the press), the hit (the frame where it happens), the follow-through (what drifts off), and the settle. Each beat gets one effect or two, not five.
-3. **The word.** At most one sound-effect word per reaction, on the hit. The eight are ドン (impact), カチッ (click), シュッ (swish), ポン (pop), ズザッ (skid), ゴゴゴゴ (rumble), ズバッ (slash) and BANG.
+3. **The word.** At most one sound-effect word per reaction, on the hit. The six are ドン (impact), カチッ (click), シュッ (swish), ポン (pop), ズザッ (skid) and ゴゴゴゴ (rumble).
 4. **What is real and what is drawn.** State changes happen at once; effects only decorate them. Nothing the user needs to read may depend on an effect.
 
 ## 2. The core
@@ -27,16 +27,16 @@ If the job is only to put an existing component into an app, skip to **Wire it i
 Load `core.js` and everything is on `window.SakugaFX`:
 
 - **Motion:** `new Spring(x, stiffness, damping)`, then set `.to` and call `.step(dt)` every frame. `squashy(button, { low, wide })` gives a press that squashes while held and overshoots on release; call its `step(dt)` in `frame()`.
-- **Effects,** all in page coordinates (use `at(el, fx, fy)` to get a point on an element): `burst` (the impact star), `puff` (a smoke puff), `donut` (a smoke ring), `shards` (crystal chips), `slash` (a crescent), `lines` (speed lines), `ticks` (accent wedges), `ring`, `rings` (manga shockwaves), `splash`, `kira` (a glint), `wob` (wobble marks), `bolt` (lightning), and `sfx(word, x, y, { size })`. `hit(x, y)` is each theme's whole confirm reaction.
+- **Effects,** all in page coordinates (use `at(el, fx, fy)` to get a point on an element): `burst` (the impact star), `puff` (a smoke puff), `donut` (a smoke ring), `shards` (crystal chips), `slash` (a crescent), `lines` (speed lines), `ticks` (accent wedges), `ring`, `splash`, `kira` (a glint), `wob` (wobble marks), and `sfx(word, x, y, { size })`; pass `...hollow()` or `...dotted()` to `sfx` for the two lettering styles.
 - **Timing:** `later(ms, fn)` runs on the shared clock, not on `setTimeout`, so `look.mjs` can step it. Use it for every delay.
 - **The base class:** extend `Base`, give it `static css`, `render()` (the shadow HTML), `setup()` (listeners, springs) and `frame(dt)`. `backLayer()` gives a canvas inside the element, behind the control, for an effect that must sit behind it (pass `{ layer }` to `burst`). `static formAssociated = true` gets `this.internals` for forms.
-- **Themes:** `setTheme('sakuga' | 'slash' | 'manga')` sets `data-sakuga-theme` on `<html>`. `P` is the current effects palette. In CSS use the `--sk-*` variables (`--sk-ink`, `--sk-card`, `--sk-pri`, `--sk-acc`, `--sk-sh`, ...).
+- **Colours:** `P` is the effects palette. In CSS use the `--sk-*` variables (`--sk-ink`, `--sk-card`, `--sk-pri`, `--sk-acc`, `--sk-sh`, ...).
 
 ## 3. The rules
 
 These are the corrections that came up most.
 
-- **Two tones and a line.** Every drawn shape is a flat light tone, one flat shadow tone and an outline. No gradients, no blur (the Slash look's glow is the one exception, and it is in the palette, not in your code).
+- **Two tones and a line.** Every drawn shape is a flat light tone, one flat shadow tone and an outline. No gradients, no blur.
 - **Things leave by shrinking or thinning, not by fading.** An effect's opacity never changes.
 - **Squash keeps volume.** When something squashes to `y` high it gets wider; when it stretches it gets thinner.
 - **Springs, not easings,** for anything the hand moves. Stretch comes from the spring's speed, so a fast drag smears and a slow one does not.
@@ -57,15 +57,14 @@ A component that runs without errors has told you nothing about how it reacts.
    ```
 
 2. Open the sheet and read each frame: is the hit frame clear, does anything cover the label, does each effect leave by shrinking, is there a frame where nothing is happening that should be.
-3. Look at all three themes (`SakugaFX.setTheme('slash')` in `--do`).
-4. Fix what you see and look again. Expect several rounds.
+3. Fix what you see and look again. Expect several rounds.
 
 ## 5. Wire it in
 
 - **One file per component.** Each component file carries a copy of the core between its `// >>> sakuga core` markers, so it works on its own; the first one loaded sets `window.SakugaFX`, the rest reuse it. When you change the core, run `node tools/build.mjs` in the repo to stamp it into every file.
 - **Load it with a plain script tag,** not as a module, and do not split or rewrite it.
 - **Attributes and properties for state, events for what happened:** `change` for value controls (they also work in forms), `click` for buttons, `sakuga:done` for progress.
-- **Do not edit the effects to restyle someone else's component.** Set the `--sk-*` variables or the theme, or say what needs to look different.
+- **Do not edit the effects to restyle someone else's component.** Set the `--sk-*` variables, or say what needs to look different.
 
 ## 6. Check it
 
@@ -75,7 +74,6 @@ Use it the way a person would, in a real browser, and report each separately.
 - **Keyboard:** Tab to it, then the keys that should work it.
 - **Two widths:** a desktop width and 390 pixels, with no sideways scroll.
 - **Forms:** if it has a value, `new FormData(form)` should contain it.
-- **All three themes.**
 
 ## 7. Say what is true
 

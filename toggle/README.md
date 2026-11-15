@@ -42,6 +42,6 @@ el.flip();            // from code, with the animation
 
 ## Limits
 
-- **It is about 520 KB,** most of it the frames. The other components are about 62 KB.
-- **The art is the same in all three looks.** The Slash and Manga palettes do not reach it.
+- **It is about 500 KB,** most of it the frames. The other components are about 45 KB.
+- **The art is painted,** so the `--sk-*` colours do not reach it.
 - **Reduced motion** skips to the last frame.
