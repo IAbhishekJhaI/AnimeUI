@@ -20,7 +20,7 @@
   .pill:hover { border-color: var(--text); }
   :focus-visible { outline: 2.5px solid #ff5fa8; outline-offset: 3px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 28px; grid-auto-flow: dense; }
-  .card { display: flex; flex-direction: column; min-width: 0; border: 1.5px solid var(--line); border-radius: 18px; }
+  .card { position: relative; display: flex; flex-direction: column; min-width: 0; border: 1.5px solid var(--line); border-radius: 18px; }
   .card.wide { grid-column: span 2; }
   .card h2 { margin: 0; padding: 14px 16px 0; font-size: 15px; font-weight: 700; }
   .card h2 span { margin-left: 6px; color: var(--mute); font-weight: 500; }
@@ -33,6 +33,16 @@
   .note { margin: 40px 0 0; color: var(--mute); font-size: 13px; }
   .note code { padding: 1px 5px; border-radius: 5px; background: var(--chip); font-size: 12.5px; }
   .toastwrap { position: relative; display: grid; justify-items: center; gap: 22px; }
+  .card.ztop { z-index: 5; }
+  .stage.top { align-items: start; padding-top: 44px; }
+  .stack { display: grid; justify-items: center; gap: 14px; width: 100%; }
+  .pill[aria-pressed=true] { border-color: var(--text); background: var(--chip); }
+  .sw { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--text); }
+  .bar-lbl { color: var(--mute); font-size: 13px; font-weight: 600; margin-right: 2px; }
+  .section-title { margin: 40px 0 0; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--mute); }
+  .trig { padding: 13px 26px; border: var(--sk-bw, 3.2px) solid var(--sk-ink, #1d1a4a); border-radius: var(--sk-r, 15px); background: var(--sk-card, #fff); color: var(--sk-ink, #1d1a4a); font: italic 800 18px/1.1 "Avenir Next", "Nunito", -apple-system, "Segoe UI", system-ui, sans-serif; box-shadow: var(--sk-sh, 6px 7px 0 #b8b3ff); cursor: pointer; }
+  .mbtn { padding: 9px 18px; border: var(--sk-bw, 3.2px) solid var(--sk-ink, #1d1a4a); border-radius: 13px; background: var(--sk-card, #fff); color: var(--sk-ink, #1d1a4a); font: italic 800 15px/1.1 "Avenir Next", "Nunito", -apple-system, "Segoe UI", system-ui, sans-serif; box-shadow: 4px 5px 0 var(--sk-soft, #b8b3ff); cursor: pointer; }
+  .mbtn.pri { background: var(--sk-pri, #8f8df7); color: var(--sk-on-pri, #fff); }
   @media (max-width: 680px) { .card.wide { grid-column: auto; } }
 </style>
 </head>
@@ -41,8 +51,12 @@
   <header>
     <div>
       <h1>Sakuga VFX</h1>
-      <p class="lede">Twelve ordinary controls that react like anime: squash and overshoot on springs, and drawn effects (smoke, impact bursts, splashes, slashes) with manga sound-effect lettering. Each one is a single file with no dependencies.</p>
+      <p class="lede">Twenty ordinary controls that react like anime: squash and overshoot on springs, and drawn effects (smoke, impact bursts, splashes, slashes) with manga sound-effect lettering. Each one is a single file with no dependencies. The last eight are an extended set built on the same core.</p>
       <p class="links">
+        <span class="bar-lbl">Theme override:</span>
+        <button class="pill" type="button" data-theme="classic" aria-pressed="true"><span class="sw" style="background:#8f8df7"></span>Sakuga Classic</button>
+        <button class="pill" type="button" data-theme="crimson" aria-pressed="false"><span class="sw" style="background:#ff4f79"></span>Shonen Crimson</button>
+        <button class="pill" type="button" data-theme="mint" aria-pressed="false"><span class="sw" style="background:#2cc990"></span>Cyber Mint</button>
         <a class="pill" href="https://github.com/finktheartist/sakuga-vfx" target="_blank" rel="noopener">The repo on GitHub <span aria-hidden="true">&#8599;</span></a>
         <a class="pill" href="https://x.com/crtvTeknologist" target="_blank" rel="noopener">@crtvTeknologist on X <span aria-hidden="true">&#8599;</span></a>
       </p>
@@ -51,6 +65,14 @@
   <main class="grid" id="grid"></main>
   <p class="note">Effects are drawn on one canvas over the page and switch off for <code>prefers-reduced-motion</code>. Every colour is a <code>--sk-*</code> variable you can override.</p>
 </div>
+<sakuga-modal id="demoModal" title="Cut #42 ready">
+  <p style="margin:0">This dialog drops in on a spring over a manga screentone backdrop, slams into place with a back-layer starburst and ドン!, and leaves by shrinking cleanly to zero.</p>
+  <div slot="footer" style="display:flex;gap:10px">
+    <button class="mbtn" type="button" id="modalCancel">Cancel</button>
+    <button class="mbtn pri" type="button" id="modalShip">Ship it</button>
+  </div>
+</sakuga-modal>
+
 <script src="../button/button.js"></script>
 <script src="../toggle/toggle.js"></script>
 <script src="../slider/slider.js"></script>
@@ -62,6 +84,14 @@
 <script src="../rating/rating.js"></script>
 <script src="../toast/toast.js"></script>
 <script src="../tooltip/tooltip.js"></script>
+<script src="../select/select.js"></script>
+<script src="../accordion/accordion.js"></script>
+<script src="../stepper/stepper.js"></script>
+<script src="../chips/chips.js"></script>
+<script src="../hold-button/hold-button.js"></script>
+<script src="../modal/modal.js"></script>
+<script src="../copy/copy.js"></script>
+<script src="../dropzone/dropzone.js"></script>
 <script>
 // The gallery: every control live on one page, with its install line and a prompt that hands a coding agent the real file.
 const REPO = 'finktheartist/sakuga-vfx';
@@ -79,6 +109,72 @@ const ITEMS = [
   { id: 'toast', name: 'Toast', tag: 'sakuga-toast', how: 'Press Save.', html: '<div class="toastwrap"><sakuga-button variant="secondary" data-demo="save">Save</sakuga-button><sakuga-toast></sakuga-toast></div>' },
   { id: 'tooltip', name: 'Tooltip', tag: 'sakuga-tooltip', how: 'Hover, focus or tap the button.', html: '<sakuga-tooltip text="Helpful hint!"></sakuga-tooltip>' },
 ];
+
+// The extended set: eight more controls on the same core. Their cards copy a usage snippet instead of an install line.
+const EXTENDED = [
+  {
+    id: 'select', name: 'Select', tag: 'sakuga-select', ztop: true,
+    how: 'Open it and pick another timing.',
+    html: `<sakuga-select label="Animation timing"><option value="ones" selected>On ones (24 fps)</option><option value="twos">On twos (12 fps)</option><option value="impact">Impact cut</option><option value="smear">Smear frame</option></sakuga-select>`,
+    snippet: `<script src="select.js"><\/script>\n<sakuga-select label="Timing"><option value="ones" selected>On ones</option><option value="twos">On twos</option></sakuga-select>`,
+  },
+  {
+    id: 'hold-button', name: 'Hold button', tag: 'sakuga-hold-button',
+    how: 'Press and hold (or hold Space) for 1.1 s. Let go early to vent steam.',
+    html: `<sakuga-hold-button duration="1.1">Hold to launch</sakuga-hold-button>`,
+    snippet: `<script src="hold-button.js"><\/script>\n<sakuga-hold-button duration="1.2">Hold to launch</sakuga-hold-button>`,
+  },
+  {
+    id: 'stepper', name: 'Stepper', tag: 'sakuga-stepper',
+    how: 'Step to 5 for a burst, then press + again to slam the limit wall.',
+    html: `<sakuga-stepper value="3" min="0" max="5" label="Copies"></sakuga-stepper>`,
+    snippet: `<script src="stepper.js"><\/script>\n<sakuga-stepper value="3" min="0" max="5" label="Copies"></sakuga-stepper>`,
+  },
+  {
+    id: 'copy', name: 'Copy pill', tag: 'sakuga-copy',
+    how: 'Click to copy. Icon swaps to a check without changing width.',
+    html: `<sakuga-copy style="--sk-copy-width:200px" text="npx shadcn add finktheartist/sakuga-vfx/button"></sakuga-copy>`,
+    snippet: `<script src="copy.js"><\/script>\n<sakuga-copy text="npm i sakuga-vfx"></sakuga-copy>`,
+  },
+  {
+    id: 'chips', name: 'Chips', tag: 'sakuga-chips',
+    how: 'Click a pill to toggle it, or hit ✕ to slash it away.',
+    html: `<div class="stack"><sakuga-chips label="Effects" removable><option value="smears" selected>Smears</option><option value="impact">Impact</option><option value="smoke">Smoke</option><option value="slash">Slash</option></sakuga-chips><button class="pill" type="button" data-reset="chips">Reset chips</button></div>`,
+    snippet: `<script src="chips.js"><\/script>\n<sakuga-chips removable><option value="smears" selected>Smears</option><option value="impact">Impact</option></sakuga-chips>`,
+  },
+  {
+    id: 'modal', name: 'Modal', tag: 'sakuga-modal',
+    how: 'Open the dialog. Escape or click the screentone backdrop to close.',
+    html: `<button class="trig" type="button" data-open="modal">Open dialog</button>`,
+    snippet: `<script src="modal.js"><\/script>\n<sakuga-modal title="Ready"><p>Body copy</p></sakuga-modal>`,
+  },
+  {
+    id: 'accordion', name: 'Accordion', tag: 'sakuga-accordion', wide: true,
+    how: 'Expand a section, or navigate headers with Up/Down arrow keys.',
+    html: `<sakuga-accordion style="--sk-accordion-width:460px"><details><summary>Keyframes &amp; timing</summary><p>Every reaction plays in four beats: anticipation, impact frame, follow-through, and settle.</p></details><details><summary>Two tones and a line</summary><p>Flat white light tone, flat lavender shadow, and a crisp violet outline — no gradients or blur.</p></details><details><summary>One shared clock</summary><p>All delays use SakugaFX.later() so frame-by-frame sheets can step every beat deterministically.</p></details></sakuga-accordion>`,
+    snippet: `<script src="accordion.js"><\/script>\n<sakuga-accordion><details><summary>Section</summary><p>Content</p></details></sakuga-accordion>`,
+  },
+  {
+    id: 'dropzone', name: 'Dropzone', tag: 'sakuga-dropzone',
+    how: 'Drag a file over, click to browse, or test a simulated drop.',
+    html: `<div class="stack"><sakuga-dropzone style="--sk-dropzone-width:276px" label="Drop keyframes here" hint="PNG, WebP or click to browse"></sakuga-dropzone><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><button class="pill" type="button" data-sim="over">Drag-over</button><button class="pill" type="button" data-sim="drop">Simulate drop</button></div></div>`,
+    snippet: `<script src="dropzone.js"><\/script>\n<sakuga-dropzone label="Drop files here"></sakuga-dropzone>`,
+  },
+];
+
+const THEMES = {
+  classic: { '--sk-ink': '#1d1a4a', '--sk-soft': '#b8b3ff', '--sk-pri': '#8f8df7', '--sk-acc': '#ff5fa8', '--sk-fill': '#ff5fa8' },
+  crimson: { '--sk-ink': '#2a1222', '--sk-soft': '#ffb8c9', '--sk-pri': '#ff4f79', '--sk-acc': '#ff9900', '--sk-fill': '#ff4f79' },
+  mint: { '--sk-ink': '#0f2d2c', '--sk-soft': '#9ef0d6', '--sk-pri': '#2cc990', '--sk-acc': '#ff5fa8', '--sk-fill': '#2cc990' },
+};
+
+document.querySelectorAll('[data-theme]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const t = THEMES[btn.dataset.theme];
+    for (const [k, v] of Object.entries(t)) document.documentElement.style.setProperty(k, v);
+    document.querySelectorAll('[data-theme]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+  });
+});
 
 // What each prompt says about wiring its component in. The rest of the prompt is the same for all of them.
 const WIRE = {
@@ -143,6 +239,55 @@ for (const it of ITEMS) {
   else if (it.tag === 'sakuga-tabs') el.addEventListener('change', (e) => say(`Tab: ${e.detail.label}`));
   else el.addEventListener('change', () => say(`change: ${it.tag === 'sakuga-toggle' || it.tag === 'sakuga-checkbox' ? (el.checked ? 'on' : 'off') : el.value}`));
 }
+const modal = document.getElementById('demoModal');
+let modalSay = () => {};
+document.getElementById('modalCancel').addEventListener('click', () => modal.close());
+document.getElementById('modalShip').addEventListener('click', () => { modalSay('confirmed: Ship it'); modal.close(); });
+modal.addEventListener('sakuga:open', () => modalSay('sakuga:open'));
+modal.addEventListener('sakuga:close', () => modalSay('sakuga:close'));
+
+// The extended set gets its own grid, so dense packing cannot pull its cards up among the originals.
+const head = document.createElement('h2'); head.className = 'section-title'; head.textContent = 'Extended set';
+const extGrid = document.createElement('div'); extGrid.className = 'grid';
+grid.after(head, extGrid);
+for (const it of EXTENDED) {
+  const card = document.createElement('section');
+  card.className = 'card' + (it.wide ? ' wide' : '') + (it.ztop ? ' ztop' : '');
+  card.innerHTML = `<h2>${it.name}<span>&lt;${it.tag}&gt;</span></h2><p class="how">${it.how}</p><div class="stage${it.top ? ' top' : ''}">${it.html}</div><p class="said" aria-live="polite"></p>
+    <div class="acts"><a class="pill" href="../${it.id}/">Docs and demo</a><button class="pill" type="button" data-copy="tag">Copy usage</button></div>`;
+  const said = card.querySelector('.said'), say = (t) => { said.textContent = t; };
+  card.querySelector('[data-copy=tag]').addEventListener('click', () => copySnippet(it.snippet, said));
+  extGrid.append(card);
+
+  const el = card.querySelector(it.tag);
+  if (it.id === 'modal') {
+    modalSay = say;
+    card.querySelector('[data-open=modal]').addEventListener('click', () => modal.open());
+  } else if (it.id === 'hold-button') {
+    let n = 0; el.addEventListener('sakuga:confirm', () => say(`sakuga:confirm (#${++n})`));
+  } else if (it.id === 'copy') {
+    el.addEventListener('sakuga:copy', (e) => say(`copied: ${e.detail.text}`));
+  } else if (it.id === 'accordion') {
+    el.addEventListener('change', (e) => say(`${e.detail.title}: ${e.detail.open ? 'open' : 'closed'}`));
+  } else if (it.id === 'chips') {
+    el.addEventListener('change', () => say(`selected: ${el.value || '(none)'}`));
+    el.addEventListener('sakuga:remove', (e) => say(`removed: ${e.detail.label}`));
+    card.querySelector('[data-reset=chips]').addEventListener('click', () => { el.reset(); say('reset'); });
+  } else if (it.id === 'dropzone') {
+    el.addEventListener('change', () => {
+      const names = el.files.map((f) => (typeof f === 'string' ? f : f.name));
+      say(names.length ? `files: ${names.join(', ')}` : 'cleared');
+    });
+    card.querySelector('[data-sim=over]').addEventListener('click', () => {
+      el.setDragOver(true); say('drag-over preview');
+      setTimeout(() => el.setDragOver(false), 700);
+    });
+    card.querySelector('[data-sim=drop]').addEventListener('click', () => el.receive(['cut-04-impact.webp']));
+  } else if (el) {
+    el.addEventListener('change', () => say(`change: ${el.value}`));
+  }
+}
+
 // Copying needs the clipboard API, which plain http (other than localhost) does not have, so fall back to a selected textarea.
 async function copy(text, btn, said) {
   let ok = false;
@@ -151,6 +296,14 @@ async function copy(text, btn, said) {
     try { ok = document.execCommand('copy'); } catch {} t.remove();
   }
   said.textContent = ok ? (btn.dataset.copy === 'cmd' ? 'Install command copied' : 'Prompt copied') : 'Could not copy here';
+}
+async function copySnippet(text, said) {
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; } catch {
+    const t = Object.assign(document.createElement('textarea'), { value: text }); t.style.cssText = 'position:fixed;opacity:0'; document.body.append(t); t.select();
+    try { ok = document.execCommand('copy'); } catch {} t.remove();
+  }
+  said.textContent = ok ? 'Usage snippet copied' : 'Could not copy here';
 }
 </script>
 </body>

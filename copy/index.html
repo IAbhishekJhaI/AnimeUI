@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sakuga Copy</title>
+<style>
+  :root { --page: #ffffff; --text: #1d1a4a; --mute: #8580b0; }
+  html { overflow-x: clip; background: var(--page); }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--page); color: var(--text); font: 15px/1.45 -apple-system, "Helvetica Neue", "Segoe UI", sans-serif; overflow-x: clip; }
+  main { width: min(640px, 100vw - 32px); padding: 40px 0 80px; }
+  h1 { margin: 0; font: italic 800 26px/1.1 "Avenir Next", "Nunito", -apple-system, "Segoe UI", sans-serif; }
+  .sub { margin: 4px 0 0; color: var(--mute); }
+  .stage { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 24px; min-height: 240px; padding: 50px 0 30px; }
+  .hint, .said { margin: 0 4px; color: var(--mute); } .said { min-height: 1.45em; margin-top: 8px; font-size: 13px; }
+  .embed body { place-items: start center; min-height: 0; } .embed h1, .embed .sub, .embed .hint { display: none; } .embed main { padding: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Copy</h1>
+  <p class="sub">A copy-to-clipboard pill that flashes, slashes across the icon, glints and snaps カチッ.</p>
+  <div class="stage">
+    <sakuga-copy id="el" text="npx shadcn add finktheartist/sakuga-vfx/button"></sakuga-copy>
+  </div>
+  <p class="hint">Click to copy the command. The icon flips to a check without changing the button width.</p>
+  <p class="said" aria-live="polite"></p>
+</main>
+<script src="copy.js"></script>
+<script>
+const Q = new URLSearchParams(location.search), el = document.getElementById('el');
+if (Q.get('embed') === '1') document.documentElement.classList.add('embed');
+el.addEventListener('sakuga:copy', (e) => { document.querySelector('.said').textContent = `copied: ${e.detail.text}`; });
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sakuga Accordion</title>
+<style>
+  :root { --page: #ffffff; --text: #1d1a4a; --mute: #8580b0; }
+  html { overflow-x: clip; background: var(--page); }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--page); color: var(--text); font: 15px/1.45 -apple-system, "Helvetica Neue", "Segoe UI", sans-serif; overflow-x: clip; }
+  main { width: min(640px, 100vw - 32px); padding: 40px 0 80px; }
+  h1 { margin: 0; font: italic 800 26px/1.1 "Avenir Next", "Nunito", -apple-system, "Segoe UI", sans-serif; }
+  .sub { margin: 4px 0 0; color: var(--mute); }
+  .stage { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 24px; min-height: 290px; padding: 50px 0 30px; }
+  .hint, .said { margin: 0 4px; color: var(--mute); } .said { min-height: 1.45em; margin-top: 8px; font-size: 13px; }
+  .embed body { place-items: start center; min-height: 0; } .embed h1, .embed .sub, .embed .hint { display: none; } .embed main { padding: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Accordion</h1>
+  <p class="sub">Expandable sections that slice open on a spring with seam puffs and シュッ.</p>
+  <div class="stage">
+    <sakuga-accordion id="el">
+      <details>
+        <summary>Keyframes &amp; timing</summary>
+        <p>Every reaction plays in four beats: anticipation, impact frame, follow-through, and settle.</p>
+      </details>
+      <details>
+        <summary>Two tones and a line</summary>
+        <p>Flat white light tone, flat lavender shadow, and a crisp violet outline. No gradients or blur.</p>
+      </details>
+      <details>
+        <summary>Zero dependencies</summary>
+        <p>One classic script per component. Multiple controls share one canvas and one shared clock.</p>
+      </details>
+    </sakuga-accordion>
+  </div>
+  <p class="hint">Click a section header, or move between headers with Up/Down arrows.</p>
+  <p class="said" aria-live="polite"></p>
+</main>
+<script src="accordion.js"></script>
+<script>
+const Q = new URLSearchParams(location.search), el = document.getElementById('el');
+if (Q.get('embed') === '1') document.documentElement.classList.add('embed');
+el.addEventListener('change', (e) => { document.querySelector('.said').textContent = `${e.detail.title}: ${e.detail.open ? 'open' : 'closed'}`; });
+</script>
+</body>
+</html>

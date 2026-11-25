@@ -20,6 +20,21 @@ Every effect is drawn in code on one canvas over the page. The lettering was pai
 | [Toast](toast/) | `<sakuga-toast>` | Streaks in as a smear, lands in dust with ズザッ, leaves by shrinking. |
 | [Tooltip](tooltip/) | `<sakuga-tooltip>` | The hint springs out like a speech bubble with puffs and カチッ. |
 
+## The extended set
+
+Eight more controls built on the same `window.SakugaFX` v1 core and design rules. They mix freely with the twelve above: any combination on a page shares one canvas and one animation loop.
+
+| | element | what happens |
+|---|---|---|
+| [Select](select/) | `<sakuga-select>` | Snaps open on a spring with seam puffs and flanking speed lines; picking flashes ink, slashes the corner, chips crystals and snaps hollow カチッ. Works in forms. |
+| [Accordion](accordion/) | `<sakuga-accordion>` | Expands `<details>` sections on a spring with outside speed lines, seam puffs, corner wedges and violet シュッ; closes briskly with sideways dust puffs. |
+| [Stepper](stepper/) | `<sakuga-stepper>` | Digit punches up on a spring with wedges and hollow ポン; bursts behind the control with crystals and a glint at `max`; shudders off limits with wobble arcs. Works in forms. |
+| [Chips](chips/) | `<sakuga-chips>` | Filter pills that flash ink and pop with a back-layer starburst and hollow ポン; removable chips slice away with a diagonal pink slash and dotted ズザッ while shrinking to zero. Works in forms. |
+| [Hold button](hold-button/) | `<sakuga-hold-button>` | Press-and-hold charges with lavender fill, hot-pink edge, levitating pebbles on a ground line, rising aura lines and ゴゴゴゴ; full charge slams with a 1-frame invert, starburst, floor shockwave ring, smoke rings, pink check and ドン!. |
+| [Modal](modal/) | `<sakuga-modal>` | Drops from above stretching with speed lines over a manga screentone backdrop, slams in with a back-layer starburst, ground dust and ドン!, and leaves by shrinking into a ring and puffs. |
+| [Copy](copy/) | `<sakuga-copy>` | Flashes ink on click, slices a pink crescent across the icon box, pops twin glints and hollow カチッ, and flips to a hot-pink check without changing width. |
+| [Dropzone](dropzone/) | `<sakuga-dropzone>` | Stretches eagerly with wobble arcs and ゴゴゴゴ on drag-over; catches drops with an impact flash, cel-shaded splash crown off the top rim, back-layer starburst, dust clouds and dotted ズザッ. |
+
 ## The look
 
 White paper, two-tone effects (white, lavender and a violet line), pink accents, and an impact burst on every confirm. The controls' colours are `--sk-*` CSS variables (`--sk-ink`, `--sk-card`, `--sk-pri`, `--sk-acc` and so on), and a page's own `:root { --sk-acc: ... }` wins over the defaults.
@@ -35,7 +50,7 @@ python3 -m http.server 8000     # from this folder
 # open http://localhost:8000/
 ```
 
-That opens the gallery, with all twelve live.
+That opens the gallery, with all twenty live.
 
 ## Use one
 
@@ -61,7 +76,17 @@ Or copy the file into your project by hand. Then load it with a plain script tag
 <sakuga-progress label="Uploading"></sakuga-progress>   <!-- then el.set(0.4) -->
 ```
 
-Each folder's README lists the attributes, properties and events. The value controls (toggle, slider, checkbox, radio, input, rating) work inside a `<form>` like the native ones.
+The extended set is not in the upstream shadcn registry yet. Copy `select/select.js`, `hold-button/hold-button.js` and the others from this repo, then use them the same way:
+
+```html
+<script src="select.js"></script>
+<sakuga-select label="Timing"><option value="ones" selected>On ones</option><option value="twos">On twos</option></sakuga-select>
+
+<script src="hold-button.js"></script>
+<sakuga-hold-button duration="1.2">Hold to launch</sakuga-hold-button>   <!-- listen for sakuga:confirm -->
+```
+
+Each folder's README lists the attributes, properties and events. The value controls (toggle, slider, checkbox, radio, input, rating, select, stepper, chips) work inside a `<form>` like the native ones.
 
 **How the files share.** Each file carries its own copy of the core (springs, the effects layer, the lettering, about 40 KB). The first one loaded sets `window.SakugaFX` and the others reuse it, so any mix of them on a page shares one canvas and one animation loop. The toggle is about 500 KB because its frames are inside it.
 
@@ -89,7 +114,7 @@ An agent with the skill gets a reasonable first pass. These took many rounds of 
 - `core.js` is the source of the shared core. After editing it, run `node tools/build.mjs`, which copies it into every component file (between the `// >>> sakuga core` markers) and into the skill. `node tools/build.mjs --check` exits 1 if any file is out of date.
 - `art/words/` holds the six painted sound-effect words. `tools/trace.py` traces them into paths and writes them into `core.js` (`uv run --with potracer --with pillow --with numpy python tools/trace.py`).
 - `toggle/frames.webp` is the toggle's sprite sheet (43 frames, 8 across, 300 by 325 each). The build writes it into `toggle.js`.
-- `node tools/test.mjs http://localhost:8000/gallery/` drives every control with real touch and key events at phone width, checks form values and sideways scroll, and exits 1 on a failure. `node tools/shot.mjs URL OUT W H SCALE` takes a full-page screenshot. Both need Chrome or Chromium (`CHROME=...` if it is somewhere unusual).
+- `node tools/test.mjs --serve . /gallery/` serves the folder itself and drives every control with real touch and key events at phone width, checks form values and sideways scroll at desktop and phone width, and exits 1 on a failure (`--shot out.png` also saves a screenshot; a URL works in place of `--serve`). `tools/look.mjs` steps a reaction to chosen moments and saves the frames side by side. `node tools/shot.mjs URL OUT W H SCALE` takes a full-page screenshot. Both need Chrome or Chromium (`CHROME=...` if it is somewhere unusual).
 
 ## Limits
 

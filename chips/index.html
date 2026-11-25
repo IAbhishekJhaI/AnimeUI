@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sakuga Chips</title>
+<style>
+  :root { --page: #ffffff; --text: #1d1a4a; --mute: #8580b0; }
+  html { overflow-x: clip; background: var(--page); }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--page); color: var(--text); font: 15px/1.45 -apple-system, "Helvetica Neue", "Segoe UI", sans-serif; overflow-x: clip; }
+  main { width: min(640px, 100vw - 32px); padding: 40px 0 80px; }
+  h1 { margin: 0; font: italic 800 26px/1.1 "Avenir Next", "Nunito", -apple-system, "Segoe UI", sans-serif; }
+  .sub { margin: 4px 0 0; color: var(--mute); }
+  .stage { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 24px; min-height: 240px; padding: 50px 0 30px; }
+  .hint, .said { margin: 0 4px; color: var(--mute); } .said { min-height: 1.45em; margin-top: 8px; font-size: 13px; }
+  .rst { margin-top: 12px; padding: 6px 12px; border: 1.5px solid #dcdaf0; border-radius: 999px; background: none; font: 600 13px/1.2 inherit; cursor: pointer; }
+  .embed body { place-items: start center; min-height: 0; } .embed h1, .embed .sub, .embed .hint { display: none; } .embed main { padding: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Chips</h1>
+  <p class="sub">Filter pills that pop in with a burst and ポン, and slice away with a slash and ズザッ.</p>
+  <div class="stage">
+    <sakuga-chips id="el" label="Effects" removable>
+      <option value="smears" selected>Smears</option>
+      <option value="impact">Impact</option>
+      <option value="smoke">Smoke</option>
+      <option value="slash">Slash</option>
+    </sakuga-chips>
+  </div>
+  <p class="hint">Click a pill to toggle it, or hit ✕ to slash it away. <button class="rst" type="button" id="rst">Reset chips</button></p>
+  <p class="said" aria-live="polite"></p>
+</main>
+<script src="chips.js"></script>
+<script>
+const Q = new URLSearchParams(location.search), el = document.getElementById('el'), said = document.querySelector('.said');
+if (Q.get('embed') === '1') document.documentElement.classList.add('embed');
+el.addEventListener('change', () => { said.textContent = `selected: ${el.value || '(none)'}`; });
+el.addEventListener('sakuga:remove', (e) => { said.textContent = `removed: ${e.detail.label}`; });
+document.getElementById('rst').addEventListener('click', () => { el.reset(); said.textContent = 'reset'; });
+</script>
+</body>
+</html>

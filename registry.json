@@ -232,6 +232,175 @@
         }
       ],
       "docs": "Sakuga Tooltip is a plain script that registers a custom element. Load /sakuga-vfx/tooltip.js with a script tag (not a module), then use <sakuga-tooltip text=\"Helpful hint!\"></sakuga-tooltip>. Opens on hover, focus and tap; Escape closes it. More: https://sakuga-vfx.vercel.app"
+    },
+    {
+      "name": "select",
+      "type": "registry:file",
+      "title": "Sakuga Select",
+      "description": "A dropdown that snaps open on a spring with seam puffs and flanking speed lines, and locks in your pick with an ink impact flash, slash, crystals and a hollow カチッ. One file, no dependencies, defines <sakuga-select>.",
+      "categories": [
+        "select",
+        "dropdown",
+        "input",
+        "anime",
+        "animation"
+      ],
+      "files": [
+        {
+          "path": "select/select.js",
+          "type": "registry:file",
+          "target": "~/public/sakuga-vfx/select.js"
+        }
+      ],
+      "docs": "Sakuga Select is a plain script that registers a custom element. Load /sakuga-vfx/select.js with a script tag (not a module), then use <sakuga-select>. Docs: select/README.md"
+    },
+    {
+      "name": "accordion",
+      "type": "registry:file",
+      "title": "Sakuga Accordion",
+      "description": "Expandable sections built from <details>/<summary> that slice open on a spring with flanking speed lines, seam puffs, corner wedges and シュッ. One file, no dependencies, defines <sakuga-accordion>.",
+      "categories": [
+        "accordion",
+        "disclosure",
+        "anime",
+        "animation"
+      ],
+      "files": [
+        {
+          "path": "accordion/accordion.js",
+          "type": "registry:file",
+          "target": "~/public/sakuga-vfx/accordion.js"
+        }
+      ],
+      "docs": "Sakuga Accordion is a plain script that registers a custom element. Load /sakuga-vfx/accordion.js with a script tag (not a module), then use <sakuga-accordion>. Docs: accordion/README.md"
+    },
+    {
+      "name": "stepper",
+      "type": "registry:file",
+      "title": "Sakuga Stepper",
+      "description": "A numeric counter whose digit punches up on a spring with wedges and a hollow ポン, bursts behind the control at max, and shudders off limits with wobble arcs and chips. One file, no dependencies, defines <sakuga-stepper>.",
+      "categories": [
+        "stepper",
+        "number",
+        "input",
+        "anime",
+        "animation"
+      ],
+      "files": [
+        {
+          "path": "stepper/stepper.js",
+          "type": "registry:file",
+          "target": "~/public/sakuga-vfx/stepper.js"
+        }
+      ],
+      "docs": "Sakuga Stepper is a plain script that registers a custom element. Load /sakuga-vfx/stepper.js with a script tag (not a module), then use <sakuga-stepper>. Docs: stepper/README.md"
+    },
+    {
+      "name": "chips",
+      "type": "registry:file",
+      "title": "Sakuga Chips",
+      "description": "Selectable and removable filter pills that pop with a back-layer starburst, glint and hollow ポン, and slice away with a diagonal pink slash and dotted ズザッ. One file, no dependencies, defines <sakuga-chips>.",
+      "categories": [
+        "chips",
+        "tags",
+        "filter",
+        "input",
+        "anime",
+        "animation"
+      ],
+      "files": [
+        {
+          "path": "chips/chips.js",
+          "type": "registry:file",
+          "target": "~/public/sakuga-vfx/chips.js"
+        }
+      ],
+      "docs": "Sakuga Chips is a plain script that registers a custom element. Load /sakuga-vfx/chips.js with a script tag (not a module), then use <sakuga-chips>. Docs: chips/README.md"
+    },
+    {
+      "name": "hold-button",
+      "type": "registry:file",
+      "title": "Sakuga Hold Button",
+      "description": "A press-and-hold confirmation button that charges with levitating pebbles, rising aura lines and ゴゴゴゴ, then confirms with a 1-frame ink flash, back-layer starburst, ground shockwave ring, smoke rings and ドン!. One file, no dependencies, defines <sakuga-hold-button>.",
+      "categories": [
+        "button",
+        "confirm",
+        "hold",
+        "anime",
+        "animation"
+      ],
+      "files": [
+        {
+          "path": "hold-button/hold-button.js",
+          "type": "registry:file",
+          "target": "~/public/sakuga-vfx/hold-button.js"
+        }
+      ],
+      "docs": "Sakuga Hold Button is a plain script that registers a custom element. Load /sakuga-vfx/hold-button.js with a script tag (not a module), then use <sakuga-hold-button>. Docs: hold-button/README.md"
+    },
+    {
+      "name": "modal",
+      "type": "registry:file",
+      "title": "Sakuga Modal",
+      "description": "A dialog that drops in from above over a manga screentone backdrop, slams into place with a back-layer starburst, dust clouds and ドン!, and closes by shrinking away cleanly. One file, no dependencies, defines <sakuga-modal>.",
+      "categories": [
+        "modal",
+        "dialog",
+        "overlay",
+        "anime",
+        "animation"
+      ],
+      "files": [
+        {
+          "path": "modal/modal.js",
+          "type": "registry:file",
+          "target": "~/public/sakuga-vfx/modal.js"
+        }
+      ],
+      "docs": "Sakuga Modal is a plain script that registers a custom element. Load /sakuga-vfx/modal.js with a script tag (not a module), then use <sakuga-modal>. Docs: modal/README.md"
+    },
+    {
+      "name": "copy",
+      "type": "registry:file",
+      "title": "Sakuga Copy",
+      "description": "A copy-to-clipboard pill that flashes ink, slices a pink crescent across the icon, pops twin glints and a hollow カチッ, and flips to a check without changing button width. One file, no dependencies, defines <sakuga-copy>.",
+      "categories": [
+        "copy",
+        "clipboard",
+        "button",
+        "anime",
+        "animation"
+      ],
+      "files": [
+        {
+          "path": "copy/copy.js",
+          "type": "registry:file",
+          "target": "~/public/sakuga-vfx/copy.js"
+        }
+      ],
+      "docs": "Sakuga Copy is a plain script that registers a custom element. Load /sakuga-vfx/copy.js with a script tag (not a module), then use <sakuga-copy>. Docs: copy/README.md"
+    },
+    {
+      "name": "dropzone",
+      "type": "registry:file",
+      "title": "Sakuga Dropzone",
+      "description": "A file upload target that stretches with ゴゴゴゴ on drag-over and catches dropped files with a heavy squash, cel-shaded splash crown, back-layer starburst, corner dust clouds and dotted ズザッ. One file, no dependencies, defines <sakuga-dropzone>.",
+      "categories": [
+        "upload",
+        "dropzone",
+        "file",
+        "input",
+        "anime",
+        "animation"
+      ],
+      "files": [
+        {
+          "path": "dropzone/dropzone.js",
+          "type": "registry:file",
+          "target": "~/public/sakuga-vfx/dropzone.js"
+        }
+      ],
+      "docs": "Sakuga Dropzone is a plain script that registers a custom element. Load /sakuga-vfx/dropzone.js with a script tag (not a module), then use <sakuga-dropzone>. Docs: dropzone/README.md"
     }
   ]
 }

@@ -21,6 +21,19 @@ Each is one plain script that registers a custom element. Load it with a script 
 - [Toast](https://sakuga-vfx.vercel.app/toast/toast.js): A notification that streaks in as a smear, lands in dust with ズザッ, wobbles and leaves by shrinking. `<sakuga-toast>`: Put <sakuga-toast></sakuga-toast> where toasts should appear and call el.show("Saved"). It stays for the duration attribute (2.6 s) or until el.hide(). [Docs](https://github.com/finktheartist/sakuga-vfx/blob/main/toast/README.md)
 - [Tooltip](https://sakuga-vfx.vercel.app/tooltip/tooltip.js): A help button whose hint springs out like a speech bubble, with puffs and a hollow カチッ. `<sakuga-tooltip>`: <sakuga-tooltip text="Helpful hint!"></sakuga-tooltip>. Opens on hover, focus and tap; Escape closes it. [Docs](https://github.com/finktheartist/sakuga-vfx/blob/main/tooltip/README.md)
 
+### Extended set
+
+Eight more on the same core, mixing freely with the eleven above. Same rules: one plain script each, loaded with a script tag.
+
+- Select (`select/select.js`): `<sakuga-select label="..."><option value="a" selected>A</option></sakuga-select>`. Read/set `el.value`, fires `change`. Works in forms with `name`.
+- Accordion (`accordion/accordion.js`): `<sakuga-accordion><details><summary>Title</summary><p>Body</p></details></sakuga-accordion>`. Optional `multiple` attribute. Fires `change` (`e.detail: { index, open, title }`).
+- Stepper (`stepper/stepper.js`): `<sakuga-stepper value="3" min="0" max="5" step="1" label="Quantity"></sakuga-stepper>`. Read `el.value` / `el.valueAsNumber`, fires `change`. Works in forms with `name`.
+- Chips (`chips/chips.js`): `<sakuga-chips label="Tags" removable><option value="a" selected>A</option></sakuga-chips>`. Optional `removable`, `single`. Read `el.value` / `el.values`, fires `change` and `sakuga:remove`. Works in forms with `name`.
+- Hold Button (`hold-button/hold-button.js`): `<sakuga-hold-button duration="1.2">Hold to launch</sakuga-hold-button>`. Listen for `sakuga:confirm`. Supports pointer and Space/Enter hold.
+- Modal (`modal/modal.js`): `<sakuga-modal title="Ready"><p>Body</p><div slot="footer">...</div></sakuga-modal>`. Call `el.open()` / `el.close()`. Fires `sakuga:open` and `sakuga:close`.
+- Copy (`copy/copy.js`): `<sakuga-copy text="..."></sakuga-copy>`. Listen for `sakuga:copy` (`e.detail: { text, ok }`).
+- Dropzone (`dropzone/dropzone.js`): `<sakuga-dropzone label="Drop files" hint="PNG or WebP"></sakuga-dropzone>`. Read `el.files`, fires `change`. Call `el.receive(items)` or `el.clear()`.
+
 Install any one with the shadcn CLI: `npx shadcn add finktheartist/sakuga-vfx/NAME`, where NAME is button, toggle, slider, checkbox, radio, input, tabs, progress, rating, toast, tooltip. The file lands in `public/sakuga-vfx/`.
 
 Colours are --sk-* CSS variables; a page's own :root values win. Effects switch off for prefers-reduced-motion.
